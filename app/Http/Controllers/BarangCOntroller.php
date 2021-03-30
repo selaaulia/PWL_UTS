@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 class BarangCOntroller extends Controller
@@ -13,8 +13,8 @@ class BarangCOntroller extends Controller
      */
     public function index()
     {
-        $barang = Barang::paginate(1);
-        return view('barangs.index', ['barang' => $Barang]);
+        $Barang = Barang::paginate(1);
+        return view('barangs.index', ['barangs' => $Barang]);
     }
 
     /**
@@ -110,5 +110,16 @@ class BarangCOntroller extends Controller
         Barang::find($id)->delete();
         return redirect()->route('barangs.index')
         -> with('success', 'Barang Berhasil Dihapus');
+    }
+    public function search(Request $request)
+    {
+        $Barang = Barang::when($request->keyword, function ($query) use ($request) {
+            $query->where('nama_barang', 'like', "%{$request->keyword}%")
+                ->orWhere('id_barang', 'like', "%{$request->keyword}%")
+                ->orWhere('kode_barang', 'like', "%{$request->keyword}%")
+                ->orWhere('kode_barang', 'like', "%{$request->keyword}%");
+        })->paginate(5);
+        $Barang->appends($request->only('keyword'));
+        return view('barangs.index', compact('barangs'));
     }
 }
