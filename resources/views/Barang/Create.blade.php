@@ -22,34 +22,28 @@
                     <form method="post" action="{{ route('barang.store') }}" id="myForm">
                         @csrf
                         <div class="form-group">
-                            <label for="id_barang">id_barang</label>
-                            <input type="text" name="id_barang" class="form-control" id="id_barang" value="{{ $Barang->id_barang }}"
-                                aria-describedby="id_barang">
+                        <div class="form-group">
+                            <label for="Nama Barang">Nama Barang</label>
+                            <input type="text" name="nama_barang" class="form-control" id="Nama Barang" aria-describedby="Nama Barang">
                         </div>
                         <div class="form-group">
-                            <label for="kode_barang">kode_barang</label>
-                            <input type="text" name="kode_barang" class="form-control" id="kode_barang" value="{{ $Barang->kode_barang }}"
-                                aria-describedby="kode_barang">
-                        </div>
-                        <div class="form-group">
-                            <label for="nama_barang">nama_barangs</label>
-                            <input type="nama_barang" name="nama_barang" class="form-control" id="nama_barang"
-                                value="{{ $Barang->nama_barang }}" aria-describedby="nama_barang">
-                        </div>
-                        <div class="form-group">
-                            <label for="kategori_barang">kategori_barang</label>
-                            <input type="kategori_barang" name="kategori_barang" class="form-control" id="kategori_barang"
-                                value="{{ $Barang->kategori_barang }}" aria-describedby="kategori_barang">
+                            <label for="Kategori">Kategori</label>
+                            <select name="kategori_barang" id="Kategori" class="form-control">
+                                <option value="Makanan">Makanan</option>
+                                <option value="Minuman">Minuman</option>
+                                <option value="Snack">Snack</option>
+                                <option value="Es Krim">Es Krim</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="harga">harga</label>
                             <input type="harga" name="harga" class="form-control" id="harga"
-                                value="{{ $Barang->harga }}" aria-describedby="harga" placeholder="Year-Month-Day">
+                                 aria-describedby="harga">
                         </div>
                         <div class="form-group">
                             <label for="qty">qty</label>
                             <input type="qty" name="qty" class="form-control" id="qty"
-                                value="{{ $Barang->qty }}" aria-describedby="qty">
+                                 aria-describedby="qty">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
