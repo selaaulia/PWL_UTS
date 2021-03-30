@@ -14,8 +14,9 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::resource('barang', BarangCOntroller::class);
+
 Route::get('barang/cari/',[BarangCOntroller::class, 'search']);
+Route::resource('barang', BarangCOntroller::class);
 
 Route::get('/', function () {
     return view('welcome');
