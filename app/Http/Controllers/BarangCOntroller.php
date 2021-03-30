@@ -13,8 +13,8 @@ class BarangCOntroller extends Controller
      */
     public function index()
     {
-        $Barang = Barang::paginate(5);
-        return view('barang.index', ['barang' => $Barang]);
+        $barangs = Barang::paginate(5);
+        return view('barang.index', ['barang' => $barangs]);
     }
 
     /**
@@ -35,8 +35,11 @@ class BarangCOntroller extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add([
+            'kode_barang' => 'PRD' . str_pad(Barang::max('id_barang') + 1, 3, '0', STR_PAD_LEFT)
+        ]);
+
         $request->validate([
-            'id_barang' => 'required',
             'kode_barang' => 'required',
             'nama_barang' => 'required',
             'kategori_barang' => 'required',
@@ -44,10 +47,9 @@ class BarangCOntroller extends Controller
             'qty' => 'required',
         ]);
 
-        Barang::create($request->all);
+        Barang::create($request->all());
         return redirect()->route('barang.index')
         ->with('success', 'Barang Berhasil Ditambahkan');
-   
     }
 
     /**
@@ -58,8 +60,8 @@ class BarangCOntroller extends Controller
      */
     public function show($id)
     {
-        $Barang = Barang::find($id);
-        return view('barang.index', compact('Barang'));
+        $barangs = Barang::find($id);
+        return view('barang.detail', compact('barangs'));
     }
 
     /**
@@ -70,8 +72,8 @@ class BarangCOntroller extends Controller
      */
     public function edit($id)
     {
-        $Barang = Barang::find($id);
-        return view('barang.index', compact('barang'));
+        $barangs = Barang::find($id);
+        return view('barang.edit', compact('barangs'));
     }
 
     /**
@@ -113,13 +115,20 @@ class BarangCOntroller extends Controller
     }
     public function search(Request $request)
     {
-        $Barang = Barang::when($request->keyword, function ($query) use ($request) {
-            $query->where('nama_barang', 'like', "%{$request->keyword}%")
-                ->orWhere('id_barang', 'like', "%{$request->keyword}%")
-                ->orWhere('kode_barang', 'like', "%{$request->keyword}%")
-                ->orWhere('kode_barang', 'like', "%{$request->keyword}%");
-        })->paginate(5);
-        $Barang->appends($request->only('keyword'));
-        return view('barang.index', compact('barang'));
+        $barangs = Barang::where([
+            ['kode_barang', '!=', null, 'OR', 'nama_barang', '!=', null, 'OR', 'kategori_barang', '!=', null],
+            [function ($query) use ($request){
+                if (($keyword = $request->keyword)) {
+                    $query  ->orWhere('kode_barang', 'like', "%{$keyword}%")
+                            ->orWhere('nama_barang', 'like', "%{$keyword}%")
+                            ->orWhere('kategori_barang', 'like', "%{$keyword}%");
+                }
+            }]
+        ])
+        ->orderBy('id_barang')
+        ->paginate(5);
+    
+        return view('barang.index', compact('barangs'))
+        ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 }
