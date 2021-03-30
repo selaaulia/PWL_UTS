@@ -16,7 +16,7 @@
                 </form>
             </div>
             <div class="float-right my-2">
-                <a class="btn btn-success" href="{{ route('barang.create') }}"> Input Mahasiswa</a>
+                <a class="btn btn-success" href="{{ route('barang.create') }}"> Input Barang</a>
             </div>
         </div>
     </div>
