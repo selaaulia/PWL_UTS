@@ -13,7 +13,8 @@ class BarangCOntroller extends Controller
      */
     public function index()
     {
-        //
+        $barang = Barang::paginate(1);
+        return view('barangs.index', ['barang' => $Barang]);
     }
 
     /**
@@ -23,7 +24,7 @@ class BarangCOntroller extends Controller
      */
     public function create()
     {
-        //
+        return view('barangs.create');
     }
 
     /**
@@ -34,7 +35,19 @@ class BarangCOntroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_barang' => 'required',
+            'kode_barang' => 'required',
+            'nama_barang' => 'required',
+            'kategori_barang' => 'required',
+            'harga' => 'required',
+            'qty' => 'required',
+        ]);
+
+        Barang::create($request->all);
+        return redirect()->route('barangs.index')
+        ->with('success', 'Barang Berhasil Ditambahkan');
+   
     }
 
     /**
@@ -45,7 +58,8 @@ class BarangCOntroller extends Controller
      */
     public function show($id)
     {
-        //
+        $Barang = Barang::find($id);
+        return view('barangs.index', compact('Barang'));
     }
 
     /**
@@ -56,7 +70,8 @@ class BarangCOntroller extends Controller
      */
     public function edit($id)
     {
-        //
+        $Barang = Barang::find($id);
+        return view('barangs.index', compact('Barang'));
     }
 
     /**
@@ -68,7 +83,20 @@ class BarangCOntroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'id_barang' => 'required',
+            'kode_barang' => 'required',
+            'nama_barang' => 'required',
+            'kategori_barang' => 'required',
+            'harga' => 'required',
+            'qty' => 'required',
+            ]);
+
+         //fungsi eloquent untuk mengupdate data inputan kita
+         Barang::find($id)->update($request->all());
+
+         //jika data berhasil diupdate, akan kembali ke halaman utama
+         return redirect()->route('barangs.index')->with('success', 'Barang Berhasil Diupdate');  
     }
 
     /**
@@ -79,6 +107,8 @@ class BarangCOntroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        Barang::find($id)->delete();
+        return redirect()->route('barangs.index')
+        -> with('success', 'Barang Berhasil Dihapus');
     }
 }
