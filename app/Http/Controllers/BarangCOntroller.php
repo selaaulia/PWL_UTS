@@ -14,7 +14,7 @@ class BarangCOntroller extends Controller
     public function index()
     {
         $barangs = Barang::paginate(5);
-        return view('barang.index', ['barang' => $barangs]);
+        return view('barang.index', ['barangs' => $barangs]);
     }
 
     /**
